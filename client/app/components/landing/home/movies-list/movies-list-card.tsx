@@ -1,10 +1,5 @@
-import {
-  Card,
-  CardContent
-} from "~/components/ui/card";
 import { CarouselItem } from "~/components/ui/carousel";
-import { cn } from "~/lib/utils";
-import { Star, Clock, type LucideIcon } from "lucide-react";
+import { Star, Clock } from "lucide-react";
 import type { MovieListResponse } from "~/types";
 import { Link } from "react-router";
 import MovieGenresItem from "~/components/landing/home/movie-genres-item";
@@ -15,56 +10,65 @@ interface MovieListProps {
 
 export default function MoviesListCard({ data }: MovieListProps) {
   return (
-    data?.results.map(movie => (
-      <CarouselItem key={movie.id} className="basis-1/1 md:basis-1/3 lg:basis-1/6">
-        <div className="p-1 size-full">
-          <Link to={`/movie/${movie.id}`} className="size-full">
-            <Card className="relative p-0 size-full">
-              <div className="">
-                <img src={`https://image.tmdb.org/t/p/original${movie.poster_path}`} className="size-auto bg-cover object-cover" />
+    data?.results.map((movie) => (
+      <CarouselItem
+        key={movie.id}
+        className="pl-3 basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 xl:basis-1/6"
+      >
+        <div className="size-full">
+          <Link to={`/movie/${movie.id}`} className="group block size-full">
+            <div className="relative aspect-2/3 w-full overflow-hidden rounded-2xl border border-border/50 bg-muted/30">
+              {/* Poster Image */}
+              <img
+                src={
+                  movie.poster_path
+                    ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                    : "/placeholder.png"
+                }
+                alt={movie.title}
+                loading="lazy"
+                className="size-full object-cover"
+              />
+
+              {/* Floating Top Rating Badge */}
+              <div className="absolute top-2.5 right-2.5 z-10 flex items-center gap-1 rounded-full bg-black/70 px-2 py-0.5 text-[11px] font-semibold text-amber-300 backdrop-blur-md border border-white/10 shadow-sm">
+                <Star className="size-3 fill-amber-400 text-amber-400" />
+                <span>{movie.vote_average > 0 ? movie.vote_average.toFixed(1) : "N/A"}</span>
               </div>
 
-              <CardContent className="px-3 py-2 w-full absolute bottom-0 bg-black/50 backdrop-blur-md">
-                <span className="text-white text-lg leading-0">{movie.title}</span>
-                
-                <div className="flex flex-col gap-2">
-                  <div className="flex items-center space-x-2 divide-x divide-white/80">
-                    <MovieItem
-                      className="pr-2"
-                      icon={Star}
-                      iconClassName="text-yellow-400 fill-current"
-                      value={`${movie.vote_average > 0 ? movie.vote_average.toFixed(1) : movie.vote_average}/10`}
-                    />
+              {/* Cinematic Bottom Gradient Overlay */}
+              <div className="absolute inset-0 z-1 bg-linear-to-t from-black/95 via-black/60 to-transparent opacity-90" />
 
-                    <MovieItem
-                      icon={Clock}
-                      value={movie?.release_date ? new Date(movie?.release_date).getFullYear() : "Unknown year"}
-                    />
+              {/* Card Footer Content */}
+              <div className="absolute bottom-0 inset-x-0 z-10 p-3 sm:p-3.5 flex flex-col gap-1.5">
+                <h3 className="text-white font-bold text-sm sm:text-base line-clamp-1 leading-snug drop-shadow-sm">
+                  {movie.title}
+                </h3>
+
+                <div className="flex items-center gap-2 text-white/70 text-xs">
+                  <div className="flex items-center gap-1 shrink-0">
+                    <Clock className="size-3 text-white/60" />
+                    <span>
+                      {movie.release_date
+                        ? new Date(movie.release_date).getFullYear()
+                        : "Unknown"}
+                    </span>
                   </div>
 
-                  <MovieGenresItem values={movie.genre_ids} className="flex-wrap" />
+                  <span className="text-white/40">•</span>
+
+                  <div className="truncate">
+                    <MovieGenresItem
+                      values={movie.genre_ids?.slice(0, 1)}
+                      className="flex-nowrap truncate"
+                    />
+                  </div>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           </Link>
         </div>
       </CarouselItem>
     ))
-  )
-}
-
-interface MovieItemProps {
-  className?: string;
-  icon: LucideIcon;
-  iconClassName?: string;
-  value?: string | number;
-}
-
-function MovieItem({ className, icon: Icon, iconClassName, value, }: MovieItemProps) {
-  return (
-    <div className={cn("flex items-center gap-1", className)}>
-      <Icon className={cn("text-white/80 size-4", iconClassName)} />
-      <p className="text-white/80 text-sm">{value}</p>
-    </div>
-  )
+  );
 }

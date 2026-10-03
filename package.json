@@ -1,0 +1,23 @@
+{
+  "name": "mora",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm -r --parallel dev",
+    "dev:api": "pnpm --filter api dev",
+    "dev:client": "pnpm --filter client dev",
+    "build": "pnpm -r build",
+    "build:api": "pnpm --filter api build",
+    "build:client": "pnpm --filter client build",
+    "start": "pnpm -r --parallel start",
+    "install:all": "pnpm install",
+    "install:api": "pnpm --filter api install",
+    "install:client": "pnpm --filter client install",
+    "install:frozen": "pnpm install --frozen-lockfile",
+    "setup": "pnpm install",
+    "api:add": "pnpm -F api add",
+    "api:rm": "pnpm -F api rm",
+    "client:add": "pnpm -F client add",
+    "client:rm": "pnpm -F client rm"
+  }
+}

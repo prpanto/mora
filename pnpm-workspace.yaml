@@ -1,0 +1,11 @@
+packages:
+  - 'api'
+  - 'client'
+
+allowBuilds:
+  '@scarf/scarf': true
+  esbuild: true
+
+minimumReleaseAgeExclude:
+  - '@types/node@26.1.0'
+  - 'lucide-react@1.23.0'
